@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+
+<style>
+
+body{
+font-family:"Noto Sans KR";
+text-align:center;
+background:#f5f6fb;
+margin-top:80px;
+}
+
+h1{
+font-size:44px;
+}
+
+.container{
+display:flex;
+justify-content:center;
+gap:80px;
+margin-top:70px;
+}
+
+.card{
+width:220px;
+height:260px;
+perspective:1200px;
+cursor:pointer;
+}
+
+.card-inner{
+width:100%;
+height:100%;
+transition:transform 0.8s;
+transform-style:preserve-3d;
+position:relative;
+}
+
+.card.flipped .card-inner{
+transform:rotateY(180deg);
+}
+
+.card-front,
+.card-back{
+position:absolute;
+width:100%;
+height:100%;
+border-radius:25px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+backface-visibility:hidden;
+}
+
+/* 앞면 */
+
+.place .card-front{
+background:#FFD6E0;
+}
+
+.phenomenon .card-front{
+background:#D6F0FF;
+}
+
+.variable .card-front{
+background:#E6FFD6;
+}
+
+.card-front{
+font-size:42px;
+}
+
+/* 뒷면 (더 진한 색) */
+
+.place .card-back{
+background:#ffb8c8;
+}
+
+.phenomenon .card-back{
+background:#bfe3ff;
+}
+
+.variable .card-back{
+background:#c8f0b8;
+}
+
+.card-back{
+transform:rotateY(180deg);
+font-size:46px;
+}
+
+.result{
+margin-top:70px;
+font-size:36px;
+font-weight:bold;
+}
+
+button{
+margin-top:40px;
+font-size:20px;
+padding:10px 20px;
+border:none;
+border-radius:10px;
+background:#ddd;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>탐구 주제 생성 카드</h1>
+
+<div class="container">
+
+<div class="card place" onclick="flipCard(this,'place')">
+<div class="card-inner">
+<div class="card-front">장소</div>
+<div class="card-back"></div>
+</div>
+</div>
+
+<div class="card phenomenon" onclick="flipCard(this,'phenomenon')">
+<div class="card-inner">
+<div class="card-front">현상</div>
+<div class="card-back"></div>
+</div>
+</div>
+
+<div class="card variable" onclick="flipCard(this,'variable')">
+<div class="card-inner">
+<div class="card-front">변수</div>
+<div class="card-back"></div>
+</div>
+</div>
+
+</div>
+
+<div class="result" id="result"></div>
+
+<button onclick="resetCards()">다시 섞기</button>
+
+<script>
+
+const data={
+place:["교실","운동장","집"],
+phenomenon:["온도","소리","식물"],
+variable:["시간","빛","거리"]
+};
+
+let selected={
+place:null,
+phenomenon:null,
+variable:null
+};
+
+function flipCard(card,type){
+
+const list=data[type];
+
+const value=list[Math.floor(Math.random()*list.length)];
+
+card.querySelector(".card-back").innerText=value;
+
+card.classList.add("flipped");
+
+selected[type]=value;
+
+updateResult();
+}
+
+function updateResult(){
+
+if(selected.place && selected.phenomenon && selected.variable){
+
+document.getElementById("result").innerText=
+selected.place+" + "+selected.phenomenon+" + "+selected.variable;
+
+}
+
+}
+
+function resetCards(){
+
+selected={
+place:null,
+phenomenon:null,
+variable:null
+};
+
+document.querySelectorAll(".card").forEach(card=>{
+card.classList.remove("flipped");
+card.querySelector(".card-back").innerText="";
+});
+
+document.getElementById("result").innerText="";
+
+}
+
+</script>
+
+</body>
+</html>
